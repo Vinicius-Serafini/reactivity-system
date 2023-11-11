@@ -47,7 +47,23 @@ document.getElementById('todo__input-search').addEventListener('input', (event) 
 filteredTodoList.subscribe((list) => {
   todoListEl.innerHTML = "";
   list.forEach((todo) => {
-    todoListEl.appendChild(createTodoListItem(todo));
+    const li = createTodoListItem(todo);
+    todoListEl.appendChild(li);
+
+    li.animate([
+      {
+        transform: 'translateX(50%)',
+        opacity: 0
+      },
+      {
+        transform: 'translateX(0)',
+        opacity: 1
+      }
+    ], {
+      duration: 200,
+      iterations: 1,
+      easing: 'ease-out'
+    });
   });
 });
 
@@ -74,7 +90,25 @@ function createTodoListItem(todo) {
   removeButton.classList.add("todo__list-item-remove");
   removeButton.textContent = "X";
   removeButton.addEventListener("click", () => {
-    removeTodo(todo.id);
+
+    const animation = li.animate([
+      {
+        transform: 'translateX(0)',
+        opacity: 1
+      },
+      {
+        transform: 'translateX(50%)',
+        opacity: 0
+      },
+    ], {
+      duration: 200,
+      iterations: 1,
+      easing: 'ease-in'
+    });
+
+    animation.onfinish = () => {
+      removeTodo(todo.id);
+    };
   });
 
   li.appendChild(removeButton);
