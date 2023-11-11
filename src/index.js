@@ -46,24 +46,9 @@ document.getElementById('todo__input-search').addEventListener('input', (event) 
 
 filteredTodoList.subscribe((list) => {
   todoListEl.innerHTML = "";
-  list.forEach((todo) => {
+  list.forEach((todo, idx) => {
     const li = createTodoListItem(todo);
     todoListEl.appendChild(li);
-
-    li.animate([
-      {
-        transform: 'translateX(50%)',
-        opacity: 0
-      },
-      {
-        transform: 'translateX(0)',
-        opacity: 1
-      }
-    ], {
-      duration: 200,
-      iterations: 1,
-      easing: 'ease-out'
-    });
   });
 });
 
