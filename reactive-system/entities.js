@@ -1,3 +1,7 @@
+/**
+ * @typedef {Observable | Computed } Watchable
+ */
+
 export class Observable {
   /** @type {Set<() => void>} */
   #subscribers;
@@ -44,6 +48,9 @@ export class ObservableOf extends Observable {
     this.#value = value;
 
     this.get = this.get.bind(this);
+    this.update = this.update.bind(this);
+    this.subscribe = this.subscribe.bind(this);
+    this.unsubscribe = this.unsubscribe.bind(this);
   }
 
   get() {
@@ -69,6 +76,10 @@ export class ObservableOf extends Observable {
       fn(this.get());
     });
   }
+
+  unsubscribe(fn) {
+    super.unsubscribe(fn);
+  }
 }
 
 /**
@@ -85,16 +96,29 @@ export class Computed {
   constructor(fn) {
     this.#fn = fn;
     this.#observable = new ObservableOf(fn());
+
+    this.get = this.get.bind(this);
+    this.update = this.update.bind(this);
+    this.subscribe = this.subscribe.bind(this);
+    this.unsubscribe = this.unsubscribe.bind(this);
   }
 
   /** @returns {T} */
   get() {
-    this.#observable.update(this.#fn());
+    this.update();
     return this.#observable.get();
+  }
+
+  update() {
+    this.#observable.update(this.#fn());
   }
 
   /** @param {() => void} fn */
   subscribe(fn) {
     this.#observable.subscribe(fn);
+  }
+
+  unsubscribe(fn) {
+    this.#observable.unsubscribe(fn);
   }
 }
