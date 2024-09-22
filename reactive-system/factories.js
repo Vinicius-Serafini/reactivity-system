@@ -38,13 +38,15 @@ const _observableOf = (value, context) => {
  * 
  * @returns {() => void} stop function
  */
-export const watch = (watchable, fn) => {
-  watchable.subscribe(() => {
+const _watch = (watchable, fn, context) => {
+  const handler = () => {
     fn(watchable.get());
-  });
+  }
+
+  context.subscribe(handler);
 
   const unsubscribe = () => {
-    watchable.unsubscribe(fn);
+    context.unsubscribe(handler);
   };
 
   return unsubscribe;
@@ -52,3 +54,4 @@ export const watch = (watchable, fn) => {
 
 export const computed = /** @param {() => T} fn */ (fn) => _computed(fn, globalContext);
 export const observableOf = /** @param {T} value */ (value) => _observableOf(value, globalContext);
+export const watch = /** @param {import("./entities.js").Watchable} watchable */ (watchable, fn) => _watch(watchable, fn, globalContext);

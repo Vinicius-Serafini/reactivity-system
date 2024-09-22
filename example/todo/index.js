@@ -1,4 +1,4 @@
-import { computed, observableOf } from "../../reactive-system/factories.js";
+import { computed, observableOf, watch } from "../../reactive-system/factories.js";
 
 /** 
  * @typedef {Object} Todo
@@ -44,13 +44,13 @@ document.getElementById('todo__input-search').addEventListener('input', (event) 
   todoListSearch.update(event.target.value || '');
 });
 
-filteredTodoList.subscribe((list) => {
+watch(filteredTodoList, (list) => {
   todoListEl.innerHTML = "";
   list.forEach((todo, idx) => {
     const li = createTodoListItem(todo);
     todoListEl.appendChild(li);
   });
-});
+})
 
 /**
  * 
