@@ -1,4 +1,4 @@
-import { computed, observableOf } from "./lib/factories.js";
+import { computed, observableOf } from "../../reactive-system/factories.js";
 
 /** 
  * @typedef {Object} Todo
